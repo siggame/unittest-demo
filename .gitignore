@@ -1,0 +1,12 @@
+*.out
+*.o
+
+doc
+coverage
+
+# Coverage data files
+*.gcda
+*.gcno
+*.gcda
+*.gcno
+*.gcov
