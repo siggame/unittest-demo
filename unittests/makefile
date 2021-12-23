@@ -9,7 +9,7 @@ OBJECTS = $(SOURCES:.cpp=.o) $(wildcard *.o)
 
 # Generate coverage report
 report: test coverage
-	gcovr --html --html-details --root=../ -o coverage/report.html
+	gcovr --exclude=catch.hpp --html --html-details --root=../ -o coverage/report.html
 
 # Create the coverage directory if not exist
 coverage:
