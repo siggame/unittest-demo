@@ -5,5 +5,14 @@
 int triangle_tritype(int a, int b, int c)
 {
     // TODO implement tritype
+    if (! (a > 0 && b > 0 && c > 0))
+        return TRIANGLE_ERR;
+    if (a == b && a == c)
+        return TRIANGLE_EQUI;
+    if (a == b || b == c)
+        return TRIANGLE_ISO;
+    if (a != b && a != c)
+        return TRIANGLE_SCAL;
+    
     return TRIANGLE_ERR;
 }

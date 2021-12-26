@@ -19,6 +19,8 @@ class NodeVisitor(c_ast.NodeVisitor):
             # remove a line
             line = node.coord.line - 1
             print(line, node.coord.column, "BinaryOp", node.op, file=self.file)
+            self.visit(node.left)
+            self.visit(node.right)
 
 def main():
     file = sys.argv[1]
