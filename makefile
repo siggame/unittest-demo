@@ -10,8 +10,10 @@ test: $(OBJECTS)
 	make -C unittests
 
 %.o: %.cpp $(HEADERS)
-	g++ -g $(CFLAGS) -c $< -o $@
-	g++ -g --coverage -c $< -o unittests/$@
+	g++ -g $(CFLAGS) -c $< -o $@ & \
+	g++ -g --coverage -c $< -o unittests/$@ & \
+	python3 unittests/mutation-candidates.py $<
+	
 
 clean:
 	rm *.o & rm *.gc* & make -C unittests clean

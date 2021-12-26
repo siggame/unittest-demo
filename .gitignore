@@ -10,3 +10,5 @@ coverage
 *.gcda
 *.gcno
 *.gcov
+
+*.mut
