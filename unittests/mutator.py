@@ -37,7 +37,7 @@ def main():
             
             for i, matched_operator in enumerate(match):
                 lines = [ line for line in code.split("\n") ]
-                _, col, op, sym = matched_operator
+                _, col, _, op, sym = matched_operator
                 row = int(executed_line)
                 col = int(col)
                 symboltype = BINOP_MUTATION_TYPE[sym]

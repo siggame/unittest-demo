@@ -12,13 +12,22 @@ class NodeVisitor(c_ast.NodeVisitor):
     def __init__(self, file):
         super().__init__()
         self.file = file
+        self.context = ["<global>"]
+    
+    def visit_FuncDef(self, node):
+        if node.coord.file == "<stdin>":
+            self.cur = node.decl.name
+            self.context.append(node.decl.name)
+            self.visit(node.body)
+            self.context.pop()
+
 
     def visit_BinaryOp(self, node):
         if node.coord.file == "<stdin>":
             # Since we had to include _undef.h to remove gcc's compiler extensions,
             # remove a line
             line = node.coord.line - 1
-            print(line, node.coord.column, "BinaryOp", node.op, file=self.file)
+            print(line, node.coord.column, self.context[-1], "BinaryOp", node.op, file=self.file)
             self.visit(node.left)
             self.visit(node.right)
 
