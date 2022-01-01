@@ -22,7 +22,7 @@ test: test.out
 	gcov -mr ../*.hpp
 
 mutate: test.out
-	./test.out
+	bash -c "export MUTATION_TEST=1; ./test.out"
 
 
 # Link objects together. The to-be-tested is compiled from root and placed here

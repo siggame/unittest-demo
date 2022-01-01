@@ -25,8 +25,8 @@ main.out: .main.cpp
 # Compile mutated files
 mutate: $(MUTDB)
 	$(MAKE) -s
-	$(MAKE) -j -C ./unittests/mut
-	$(MAKE) -C ./unittests mutate
+	$(MAKE) -j -C ./unittests/mut -s
+	$(MAKE) -C ./unittests mutate -s
 
 # Using the .mut file, generate .mutdb file after creating the source mutations
 %.mutdb : %.mut
