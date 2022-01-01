@@ -6,7 +6,7 @@ SHARED := $(SOURCES:.cpp=.so)
 all: $(OBJECTS) $(SHARED)
 
 %.so: %.o
-	g++ -shared -Wl,-soname,lib$@ -o ../lib/lib$@ $^ -lpthread -lm
+	g++ -shared -Wl,-soname,$@ -o $@ $^ -lpthread -lm
 
 %.o: %.cpp
-	g++ -I ../ -fPIC $(CFLAGS) -c $< -o $@
+	g++ -I ../../ -fPIC $(CFLAGS) -c $< -o $@

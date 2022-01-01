@@ -13,6 +13,7 @@ int triangle_tritype(int a, int b, int c)
         return TRIANGLE_ISO;
     if (a != b && a != c)
         return TRIANGLE_SCAL;
-    
+    if ((a + b) < c || (a + c) < b || (b + c) < a)
+        return TRIANGLE_ERR;
     return TRIANGLE_ERR;
 }

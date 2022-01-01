@@ -21,9 +21,16 @@ test: test.out
 	cd ../ && gcov -mr ../*.cpp
 	gcov -mr ../*.hpp
 
+mutate: test.out
+	./test.out
+
+
 # Link objects together. The to-be-tested is compiled from root and placed here
-test.out: $(OBJECTS) test_main.o
-	g++ -g --coverage $^ -o $@
+test.out: $(OBJECTS) test_main.o src/mutation.o
+	g++ -g --coverage $^ -o $@ -ldl
+
+src/mutation.o: src/mutation.cpp
+	g++ -g -c $< -o $@
 
 # Separate rule for test_main. If file in root directory was changed, recompile
 # tests except main.

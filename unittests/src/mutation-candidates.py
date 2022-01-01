@@ -47,7 +47,7 @@ def main():
     #   The -E preserves line info
     #   --std=c99 : Use c99 standard
     #   -o : output file
-    os.system(f"sed '1 i\\#include \"unittests/_undefs.h\"' {file} | cpp -x c -E --std=c99 -o /tmp/mutation-registry")
+    os.system(f"sed '1 i\\#include \"unittests/src/_undefs.h\"' {file} | cpp -x c -E --std=c99 -o /tmp/mutation-registry")
     
     try:
         # Generate abstract syntax tree so we can get the location of

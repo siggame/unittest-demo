@@ -19,11 +19,18 @@ BINOP_MUTATION_TYPE = {
     "<=": "ROR",
     ">": "ROR",
     ">=": "ROR",
+
+    "+": "AOR",
+    "-": "AOR",
+    "*": "AOR",
+    "/": "AOR",
+    "%": "AOR",
 }
 
 BINOP_MUTATION_TRANSITION = {
     "LCR": { "&&", "||" },
-    "ROR": { "==", "!=", "<", "<=", ">", ">=" }
+    "ROR": { "==", "!=", "<", "<=", ">", ">=" },
+    "AOR": { "+", "-", "*", "/", "%" },
 }
 
 def candidate_mutations(sym):
@@ -57,20 +64,23 @@ def main():
         line = int(line) - 1 # line numbers start at 1
         col = int(col)
     
-        source = code.split("\n")
+      
         used = {sym}
 
         # Generate a mutation for each operator, up to MAX_PER_OPERATOR or until
         # we've exhausted the set of candidates
         for j in range(MAX_PER_OPERATOR):
+            source = code.split("\n")
             if len(used) == len(candidate_mutations(sym)):
                 break
             source[line], alt = mutate_line(source[line][:], col, sym, used)
-            mutfile = os.path.join(srcdir, f"{i}-{j}-{filename}")
-            with open(os.path.join(srcdir, f"{i}-{j}-{filename}"), "w") as fp:
+            outputfile = f"{i}-{j}-{filename}"
+            output_path = os.path.join(srcdir, f"{i}-{j}-{filename}")
+            with open(output_path, "w") as fp:
                 print("\n".join(source), file=fp)
-
-            print(line+1, col, func, op, sym, alt, mutfile)
+            
+            name, _ = os.path.splitext(outputfile)
+            print(line+1, col, func, op, sym, alt, f"{name}.so")
 
              
 if __name__ == "__main__":

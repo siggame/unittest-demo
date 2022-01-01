@@ -13,3 +13,7 @@ coverage
 
 *.mut
 *.so
+*.mut
+*.mutdb
+*.vscode
+.mypy_cache
