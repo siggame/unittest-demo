@@ -35,11 +35,7 @@ def main():
     file = sys.argv[1]
     out, ext = os.path.splitext(file)
     out += ".mut"
-    try:
-        os.system("( rm /tmp/mutation-registry; )")
-    except:
-        pass
-
+  
     # Complicated shell command:
     #   sed '1...' inserts an include directive to the file stream so
     #   #include "unittests/_undefs.h" gets printed out before the rest of the file
@@ -58,9 +54,10 @@ def main():
         print("err")
     else:
         print("ok")
-        
+
         # Record to .mut file the locations of mutation candidates
         with open(out, "w") as fp:
+            print(file, file=fp)
             visitor = NodeVisitor(fp)
             visitor.visit(ast)
 
