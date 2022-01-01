@@ -1,0 +1,4 @@
+# ignore all mutants in this directory
+*.c
+*.cpp
+*.so
