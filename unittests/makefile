@@ -27,7 +27,7 @@ mutate: test.out
 
 # Link objects together. The to-be-tested is compiled from root and placed here
 test.out: $(OBJECTS) test_main.o src/mutation.o
-	g++ -g --coverage $^ -o $@ -ldl
+	g++ -g --coverage $^ -o $@ -ldl -lpthread -lm
 
 src/mutation.o: src/mutation.cpp
 	g++ -g -c $< -o $@
