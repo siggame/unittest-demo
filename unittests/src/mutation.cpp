@@ -89,18 +89,7 @@ struct __db {
 
 const char *mutation_get_library(const char *symbol, int i)
 {
-    if (! getenv("MUTATION_TEST")) {
-        puts("not mutating");
-        return NULL;
-    }
-
-    
-    if (! db.db.count(symbol)) {
-        puts("no such symbol");
-        exit(1);
-    }
-    
-    if (i < db.db[symbol].size()) {
+    if (getenv("MUTATION_TEST") && db.db.count(symbol) && i < db.db[symbol].size()) {
         return db.db[symbol][i].c_str();
     }
     return NULL;
