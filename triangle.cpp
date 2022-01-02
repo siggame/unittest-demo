@@ -1,19 +1,54 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "triangle.h"
+
+
+static int is_valid_sides(int a, int b, int c)
+{
+    return a > 0 && b > 0 && c > 0;
+}
+
+static int is_equilateral(int a, int b, int c)
+{
+    return a == b && b == c;
+}
+
+static int is_isoceles(int a, int b, int c)
+{
+    return (a == b && b != c) || (a == c && a != b) || (b == c && b != a);
+}
+
+static int is_scalene(int a, int b, int c)
+{
+    return a != b && a != c && b != c;
+}
+
+static int is_valid_triangle(int a, int b, int c)
+{
+    return is_valid_sides(a, b, c) && a + b > c;
+}
 
 int triangle_tritype(int a, int b, int c)
 {
-    // TODO implement tritype
-    if (! (a > 0 && b > 0 && c > 0))
+    if (! is_valid_triangle(a, b, c)) {
         return TRIANGLE_ERR;
-    if (a == b && a == c)
+    }
+    if (is_equilateral(a, b, c)) {
         return TRIANGLE_EQUI;
-    if (a == b || b == c)
+    }
+    if (is_isoceles(a, b, c)) {
         return TRIANGLE_ISO;
-    if (a != b && a != c)
+    }
+    if (is_scalene(a, b, c)) {
         return TRIANGLE_SCAL;
-    if ((a + b) < c || (a + c) < b || (b + c) < a)
-        return TRIANGLE_ERR;
+    }
     return TRIANGLE_ERR;
+}
+
+double triangle_area(double a, double b, double c)
+{
+    double s = ((double) (a + b + c)) / 2;
+    return sqrt(s * (s - a) * (s - b) * (s - c));
+    
 }

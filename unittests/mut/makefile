@@ -3,13 +3,10 @@ OBJECTS := $(SOURCES:.cpp=.o)
 HEADERS := $(wildcard *.h) $(wildcard *.hpp)
 SHARED := $(SOURCES:.cpp=.so)
 
-all: $(OBJECTS) $(SHARED)
+all: $(SHARED)
 
-%.so: %.o
-	g++ -shared -Wl,-soname,$@ -o $@ $^ -lpthread -lm
-
-%.o: %.cpp
-	g++ -I ../../ -fPIC $(CFLAGS) -c $< -o $@
+%.so: %.cpp
+	g++ -I ../../ -shared -o $@ $^ -lpthread -lm
 
 clean:
 	rm *.so & rm *.cpp & rm *.o

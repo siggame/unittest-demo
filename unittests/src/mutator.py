@@ -30,7 +30,7 @@ BINOP_MUTATION_TYPE = {
 BINOP_MUTATION_TRANSITION = {
     "LCR": { "&&", "||" },
     "ROR": { "==", "!=", "<", "<=", ">", ">=" },
-    "AOR": { "+", "-", "*", "/", "%" },
+    "AOR": { "+", "-", "*", "/"},
 }
 
 def candidate_mutations(sym):

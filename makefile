@@ -13,7 +13,7 @@ export WORKSPACE_FOLDER := $(CURDIR)
 all: $(OBJECTS) $(SHARED)
 	
 
-test: $(OBJECTS)
+test: $(OBJECTS) $(SHARED)
 	$(MAKE) -C unittests
 
 run: main.out
@@ -25,7 +25,7 @@ main.out: .main.cpp
 # Compile mutated files
 mutate: $(MUTDB)
 	$(MAKE) -s
-	$(MAKE) -j -C ./unittests/mut -s
+	$(MAKE) -j -C ./unittests/mut
 	$(MAKE) -C ./unittests mutate -s
 
 # Using the .mut file, generate .mutdb file after creating the source mutations

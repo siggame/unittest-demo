@@ -48,51 +48,45 @@ def main():
     #   --std=c99 : Use c99 standard
     #   -o : output file
     os.system(f"sed '1 i\\#include \"unittests/src/_undefs.h\"' {file} | cpp -x c -E --std=c99 -o /tmp/mutation-registry")
+
+
+    # Generate abstract syntax tree so we can get the location of
+    # arithmetic, relational, augmented assignments, and unary ops
+    ast = parse_file("/tmp/mutation-registry")
+
     
-    try:
-        # Generate abstract syntax tree so we can get the location of
-        # arithmetic, relational, augmented assignments, and unary ops
-        ast = parse_file("/tmp/mutation-registry")
-    except:
-        print("err")
-    else:
-        
-        with open(file, "r") as fp:
-            source = fp.read()
-        
-        src_lines = source.split("\n")
+    with open(file, "r") as fp:
+        source = fp.read()
+    
+    src_lines = source.split("\n")
 
-        # Record to .mut file the locations of mutation candidates
-        
-        with open(out, "w") as fp:
-            print(file, file=fp)
-            visitor = NodeVisitor(fp)
-            visitor.visit(ast)
+    # Record to .mut file the locations of mutation candidates
+    
+    with open(out, "w") as fp:
+        print(file, file=fp)
+        visitor = NodeVisitor(fp)
+        visitor.visit(ast)
 
-            # Annoyingly, the "node.coord" attribute only captures the root node
-            # coordinate. So if you have more than one operation per line, you
-            # end up with multiple entries in the mutation registry. So we need
-            # to manually search each line for the specified symbol and update
-            for line in visitor.lines:
-                src_line = src_lines[line - 1]
-                visited = set()
-                for _, col, func, op, sym in visitor.lines[line]:
-                    j = col
-                    symlen = len(sym)
-                    while True:
-                        if (src_line[j:j+symlen]) == sym:
-                            coord = (line, j, func, op, sym)
-                            if coord not in visited:
-                                visited.add(coord)
-                                break
-                        j+=1
-                for line in sorted(visited, key=lambda x: x[1]):
-                    print(*line, file=fp)
-                
-    finally:
-        pass
+        # Annoyingly, the "node.coord" attribute only captures the root node
+        # coordinate. So if you have more than one operation per line, you
+        # end up with multiple entries in the mutation registry. So we need
+        # to manually search each line for the specified symbol and update
+        for line in visitor.lines:
+            src_line = src_lines[line - 1]
+            visited = set()
+            for _, col, func, op, sym in visitor.lines[line]:
+                j = col
+                symlen = len(sym)
+                while True:
+                    if (src_line[j:j+symlen]) == sym:
+                        coord = (line, j, func, op, sym)
+                        if coord not in visited:
+                            visited.add(coord)
+                            break
+                    j+=1
+            for line in sorted(visited, key=lambda x: x[1]):
+                print(*line, file=fp)
 
-        
 
 
 if __name__ == "__main__":

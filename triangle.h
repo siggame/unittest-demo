@@ -24,7 +24,7 @@ extern "C" {
  * @return -1 if not trianglem 0 if iso, 1 if equi, 2 of scal
  */
 int triangle_tritype(int a, int b, int c);
-
+double triangle_area(double a, double b, double c);
 
 #ifdef __cplusplus
 }
