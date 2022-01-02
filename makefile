@@ -39,7 +39,7 @@ mutate: $(MUTDB)
 	python3 unittests/src/mutation-candidates.py $< 
 
 %.so : %.o
-	g++ -shared -o unittests/lib/$@ $^ -lpthread -lm
+	g++ -shared --coverage -o unittests/lib/$@ unittests/$^ -lgcov -lpthread -lm
 
 clean:
 	rm *.o & \
