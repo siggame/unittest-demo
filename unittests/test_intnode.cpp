@@ -8,4 +8,4 @@ TEST_CASE("Leak")
     intnode_create(& node, 10);
 
     REQUIRE(intnode_print(node, stdout) == 2);
-}
+} 

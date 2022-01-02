@@ -9,37 +9,10 @@
 
 TEST_CASE("triangle tritype")
 {
-    const char *librarypath = "triangle.so";
-    int i = 0;
-    int killed = 0;
-
-    do {
-        // If the first run (of unmutated function) create a fork for each
-        // mutation
-        pid_t child;
-        if (i) { // Parent process waits for child to complete
-            if ((child = fork())) {
-                int status;
-                waitpid(child, &status, 0);
-                if (WEXITSTATUS(status) != 0 || WIFSIGNALED(status)) {
-                    killed ++;
-                }
-                continue;
-            }
-            else {
-                close(1);
-                close(2);
-            }            
-        }
-
-        void *library = dlopen(librarypath, RTLD_LAZY);
-        if (!library) {
-            printf("%s\n", dlerror());
-            return;
-        }
+    MUTATION_START(triangle_tritype, "triangle.so")
+    {
         typedef int (*triangle_tritype_func)(int, int, int);
-        triangle_tritype_func func = (triangle_tritype_func) dlsym(library, "triangle_tritype");
-
+        triangle_tritype_func func = (triangle_tritype_func) test_function();
         REQUIRE(func(0, 0, 0) == TRIANGLE_ERR);
         REQUIRE(func(0, 1, 1) == TRIANGLE_ERR);
         REQUIRE(func(1, 0, 1) == TRIANGLE_ERR);
@@ -49,69 +22,21 @@ TEST_CASE("triangle tritype")
         REQUIRE(func(2, 3, 1) == TRIANGLE_SCAL);
         REQUIRE(func(3, 3, 1) == TRIANGLE_ISO);
         REQUIRE(func(3, 3, 2) == TRIANGLE_ISO);
-        
-        dlclose(library);
-        if (! child && i) {
-            // Exit after mutation test. Report success, which we don't want
-            exit(0);
-        }
-    
-    } while ((librarypath = mutation_get_library("triangle_tritype", i++)) != NULL);
-
-    printf("\ntriangle_trytype: Killed %d times out of %d\n", killed, i - 1);
-
-}
+    } 
+    MUTATION_END 
+} 
 
 
 TEST_CASE("triangle area")
 {
-    const char *librarypath = "triangle.so";
-    int i = 0;
-    int killed = 0;
-
-    do {
-        // If the first run (of unmutated function) create a fork for each
-        // mutation
-        pid_t child;
-        if (i) { // Parent process waits for child to complete
-            if ((child = fork())) {
-                int status;
-                waitpid(child, &status, 0);
-                if (WEXITSTATUS(status) != 0 || WIFSIGNALED(status)) {
-                    killed ++;
-                }
-                continue;
-            }
-            else {
-                close(1);
-                close(2);
-            }            
-        }
-
-        void *library = dlopen(librarypath, RTLD_LAZY);
-        if (!library) {
-            printf("%s\n", dlerror());
-            return;
-        }
-        typedef double (*triangle_tritype_func)(double, double, double);
-        triangle_tritype_func func = (triangle_tritype_func) dlsym(library, "triangle_area");
-        if (! func) {
-            printf("%s\n", dlerror());
-            return;
-        }
-
+    MUTATION_START(triangle_area, "triangle.so")
+    {
+        typedef double (*AreaFunc)(double, double, double);
+        AreaFunc func = (AreaFunc) test_function();
         REQUIRE(func(0, 0, 0) == 0);
         REQUIRE(0.432 < func(1, 1, 1));
         REQUIRE(func(1, 1, 1) < 0.434); 
-
-        dlclose(library);
-        if (! child && i) {
-            // Exit after mutation test. Report success, which we don't want
-            exit(0);
-        }
-    } while ((librarypath = mutation_get_library("triangle_area", i++)) != NULL);
-
-    printf("\ntriangle_area: Killed %d times out of %d\n", killed, i - 1);
+    }
+    MUTATION_END
 }
-
-
+   

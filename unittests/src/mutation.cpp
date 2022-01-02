@@ -3,6 +3,7 @@
 #include <glob.h>
 #include <string.h>
 #include <vector>
+#include <assert.h>
 #include <unordered_map>
 #include "../mutation.h"
 
@@ -95,3 +96,30 @@ const char *mutation_get_library(const char *symbol, int i)
     return NULL;
 }
 
+void * __mutation_symbol(void * handle, const char * name) 
+{
+    void * func = dlsym(handle, name);
+    if (func == NULL) {
+        fprintf(stderr, "Could not find function %s\n", name);
+        exit(1);
+    } 
+    return func; 
+}
+
+static void * current_lib; 
+
+void * __mutation_open(const char *sym)
+{
+    current_lib = dlopen(sym, RTLD_LAZY);
+    if (current_lib == NULL) {
+        fprintf(stderr, "Could not open library %s\n", sym);
+        exit(1);
+    }
+    return current_lib;
+}
+
+void __mutation_close()
+{
+    assert(current_lib == NULL);
+    dlclose(current_lib), current_lib = NULL;
+}
