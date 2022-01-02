@@ -42,4 +42,10 @@ mutate: $(MUTDB)
 	g++ -shared -o unittests/lib/$@ $^ -lpthread -lm
 
 clean:
-	rm *.o & rm *.gc* & rm *.so & make -C unittests clean
+	rm *.o & \
+	rm *.gc* & \
+	rm *.so & \
+	rm *.mut &\
+	rm *.mutdb & \
+	make -C unittests clean &\
+	make -C unittests/mut clean

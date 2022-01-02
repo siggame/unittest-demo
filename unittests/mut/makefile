@@ -10,3 +10,6 @@ all: $(OBJECTS) $(SHARED)
 
 %.o: %.cpp
 	g++ -I ../../ -fPIC $(CFLAGS) -c $< -o $@
+
+clean:
+	rm *.so & rm *.cpp & rm *.o
