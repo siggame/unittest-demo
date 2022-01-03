@@ -15,7 +15,6 @@ TEST_CASE("triangle tritype")
         triangle_tritype_func func = (triangle_tritype_func) test_function();
         REQUIRE(func(0, 0, 0) == TRIANGLE_ERR);
         REQUIRE(func(5, 5, 11) == TRIANGLE_ERR);
-        REQUIRE(func(11, 5, 5) == TRIANGLE_ERR);
         REQUIRE(func(0, 1, 1) == TRIANGLE_ERR);
         REQUIRE(func(1, 0, 1) == TRIANGLE_ERR);
         REQUIRE(func(1, 1, 0) == TRIANGLE_ERR);

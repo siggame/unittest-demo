@@ -4,6 +4,7 @@ USAGE: c-mutate <mut> <srcdir> [options]
 Options
     --config=<config>
 """
+from collections import defaultdict
 import sys
 import random
 import docopt
@@ -65,27 +66,42 @@ def main():
     with open(filename, "r") as fp:
         code = fp.read()
     
+    func_to_lines = defaultdict(list)
+    
     for i, (line, col, func, op, sym) in enumerate(db):
         line = int(line) - 1 # line numbers start at 1
         col = int(col)
-    
-      
-        used = {sym}
 
-        # Generate a mutation for each operator, up to MAX_PER_OPERATOR or until
-        # we've exhausted the set of candidates
-        for j in range(MAX_PER_OPERATOR):
-            source = code.split("\n")
-            if len(used) == len(candidate_mutations(sym)):
-                break
-            source[line], alt = mutate_line(source[line][:], col, sym, used)
-            outputfile = f"{i}-{j}-{filename}"
-            output_path = os.path.join(srcdir, f"{i}-{j}-{filename}")
-            with open(output_path, "w") as fp:
-                print("\n".join(source), file=fp)
+
+        if op == "BinaryOp":
+        
+            used = {sym}
+
+            # Generate a mutation for each operator, up to MAX_PER_OPERATOR or until
+            # we've exhausted the set of candidates
+            for j in range(MAX_PER_OPERATOR):
+                source = code.split("\n")
+                if len(used) == len(candidate_mutations(sym)):
+                    break
+                source[line], alt = mutate_line(source[line][:], col, sym, used)
+                outputfile = f"{i}-{j}-{filename}"
+                output_path = os.path.join(srcdir, f"{i}-{j}-{filename}")
+                with open(output_path, "w") as fp:
+                    print("\n".join(source), file=fp)
+                
+                name, _ = os.path.splitext(outputfile)
+                func_to_lines[func].append([line+1, col, func, op, sym, alt, f"{name}.so"])
+                print(line+1, col, func, op, sym, alt, f"{name}.so")
+
+
+        elif op == "SYMLINK":
+            # extern function called static functions, so don't create any more mutations
+            # sym now refers to the function to be called
             
-            name, _ = os.path.splitext(outputfile)
-            print(line+1, col, func, op, sym, alt, f"{name}.so")
+            for l, c, f, o, s, a, lib in func_to_lines[sym]:
+                print(l, c, func, o, s, a, lib)
+            
+
 
              
 if __name__ == "__main__":
