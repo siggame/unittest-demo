@@ -13,12 +13,12 @@ BINOP_MUTATION_TYPE = {
     "&&": "LCR",
     "||": "LCR",
 
-    "==": "ROR",
+    "==": "ROR_E",
     "!=": "ROR",
-    "<": "ROR",
-    "<=": "ROR",
-    ">": "ROR",
-    ">=": "ROR",
+    "<": "ROR_LT",
+    "<=": "ROR_LTE",
+    ">": "ROR_GT",
+    ">=": "ROR_GTE",
 
     "+": "AOR",
     "-": "AOR",
@@ -30,6 +30,11 @@ BINOP_MUTATION_TYPE = {
 BINOP_MUTATION_TRANSITION = {
     "LCR": { "&&", "||" },
     "ROR": { "==", "!=", "<", "<=", ">", ">=" },
+    "ROR_E": { "!=", "<", ">" },
+    "ROR_GTE": { "<", "!=" },
+    "ROR_LTE": { ">", "!=" },
+    "ROR_LT": { ">", ">=", "=="},
+    "ROR_GT": { "<", "<=", "==" },
     "AOR": { "+", "-", "*", "/"},
 }
 
