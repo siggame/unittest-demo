@@ -126,6 +126,6 @@ void * __mutation_open(const char *sym)
 
 void __mutation_close()
 {
-    assert(current_lib == NULL);
+    assert(current_lib != NULL);
     dlclose(current_lib), current_lib = NULL;
 }
