@@ -26,6 +26,12 @@ struct __db {
 
     __db()
     {
+        const char *workspace_folder;
+        if (! (workspace_folder = getenv("WORKSPACE_FOLDER"))) {
+            fprintf(stderr, "WORKSPACE_FOLDER environment variable not set\n");
+            return;
+        }
+
         // Create path glob
         char pattern[1024]; memset(pattern, 0, 1024);
         strcat(pattern, getenv("WORKSPACE_FOLDER"));
